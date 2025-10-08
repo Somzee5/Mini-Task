@@ -8,6 +8,8 @@ public class MinitaskApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MinitaskApplication.class, args);
+
+
 	}
 
 }
