@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserSessionService {
@@ -16,40 +17,39 @@ public class UserSessionService {
     @Autowired
     private UserSessionRepository userSessionRepository;
 
-    private static final long SESSION_VALIDITY_MINUTES = 10;
-
-    /**
-     * Validate the provided session token and return the corresponding user.
-     * Throws RuntimeException if token is invalid or expired.
-     */
-    public User validateSession(String sessionToken) {
-        if (sessionToken == null || sessionToken.isBlank()) {
-            throw new RuntimeException("Missing session token");
-        }
-
-        Optional<UserSession> sessionOpt = userSessionRepository.findBySessionToken(sessionToken);
-        if (sessionOpt.isEmpty()) {
-            throw new RuntimeException("Invalid session token");
-        }
-
-        UserSession session = sessionOpt.get();
-
-        // Check if token expired
-        LocalDateTime createdAt = session.getCreatedAt();
-        LocalDateTime now = LocalDateTime.now();
-        long minutesElapsed = Duration.between(createdAt, now).toMinutes();
-
-        if (minutesElapsed > SESSION_VALIDITY_MINUTES) {
-            throw new RuntimeException("Session expired, please log in again");
-        }
-
-        return session.getUser();
+    // 🔹 Create new session (used after successful login)
+    public UserSession createSession(User user) {
+        UserSession session = new UserSession();
+        session.setUser(user);
+        session.setSessionToken(UUID.randomUUID().toString());
+        session.setCreatedAt(LocalDateTime.now());
+        return userSessionRepository.save(session);
     }
 
-    /**
-     * (Optional) Utility method to get latest session of a user.
-     */
-    public Optional<UserSession> getLatestSession(User user) {
-        return userSessionRepository.findTopByUserOrderByCreatedAtDesc(user);
+    // 🔹 Validate session token (throws if invalid)
+    public void validateSession(String token) {
+        Optional<UserSession> optionalSession = userSessionRepository.findBySessionToken(token);
+
+        if (optionalSession.isEmpty()) {
+            throw new RuntimeException("Invalid or missing session token");
+        }
+
+        UserSession session = optionalSession.get();
+        LocalDateTime createdAt = session.getCreatedAt();
+        LocalDateTime now = LocalDateTime.now();
+
+        // Check if more than 10 minutes have passed
+        Duration diff = Duration.between(createdAt, now);
+        if (diff.toMinutes() > 10) {
+            throw new RuntimeException("Session expired. Please log in again.");
+        }
+    }
+
+    // 🔹 Get user from valid session
+    public User getUserFromToken(String token) {
+        validateSession(token);
+        return userSessionRepository.findBySessionToken(token)
+                .map(UserSession::getUser)
+                .orElseThrow(() -> new RuntimeException("Invalid session"));
     }
 }

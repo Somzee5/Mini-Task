@@ -7,21 +7,34 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;  // 🟩 Add this import
+
 @RestController
-@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
     // 🟩 Authenticate user and create session
-    @PostMapping("/login")
+    @PostMapping("/authenticate")
     public ResponseEntity<ApiResponse<String>> authenticate(
-            @RequestParam String userName,
-            @RequestParam String password) {
+            @RequestBody(required = false) Map<String, String> credentials,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) String password) {
         try {
+            // Support both JSON and form-data
+            if (credentials != null) {
+                // Support both camelCase and lowercase keys often used in clients
+                userName = credentials.getOrDefault("userName", credentials.get("username"));
+                password = credentials.getOrDefault("password", credentials.get("pass"));
+            }
+            if (userName == null || password == null) {
+                throw new RuntimeException("Missing userName or password");
+            }
+
             String token = authService.authenticate(userName, password);
             return ResponseEntity.ok(ApiResponse.success("Login successful", token));
+
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ApiResponse.failure(e.getMessage()));

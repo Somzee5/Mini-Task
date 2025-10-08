@@ -33,8 +33,21 @@ public class AuthService {
 
         User user = userOpt.get();
 
-        // Compare raw vs hashed
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        // Handle plain-text seeded password by hashing on first successful match
+        String stored = user.getPassword();
+        boolean matches;
+        if (stored != null && stored.startsWith("$2")) { // looks like bcrypt
+            matches = passwordEncoder.matches(password, stored);
+        } else {
+            // Compare as plain text for initial seed, then migrate
+            matches = password.equals(stored);
+            if (matches) {
+                user.setPassword(passwordEncoder.encode(password));
+                userRepository.save(user);
+            }
+        }
+
+        if (!matches) {
             throw new RuntimeException("Invalid username or password!");
         }
 

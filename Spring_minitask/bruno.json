@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Spring_minitask",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
