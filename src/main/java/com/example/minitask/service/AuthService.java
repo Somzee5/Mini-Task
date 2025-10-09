@@ -36,10 +36,9 @@ public class AuthService {
         // Handle plain-text seeded password by hashing on first successful match
         String stored = user.getPassword();
         boolean matches;
-        if (stored != null && stored.startsWith("$2")) { // looks like bcrypt
+        if (stored != null && stored.startsWith("$2")) {
             matches = passwordEncoder.matches(password, stored);
         } else {
-            // Compare as plain text for initial seed, then migrate
             matches = password.equals(stored);
             if (matches) {
                 user.setPassword(passwordEncoder.encode(password));
@@ -51,10 +50,8 @@ public class AuthService {
             throw new RuntimeException("Invalid username or password!");
         }
 
-        // Generate unique session token
         String sessionToken = UUID.randomUUID().toString();
 
-        // Save session record
         UserSession session = new UserSession();
         session.setUser(user);
         session.setCreatedAt(LocalDateTime.now());
