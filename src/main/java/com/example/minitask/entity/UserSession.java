@@ -1,19 +1,22 @@
 package com.example.minitask.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_session")
 public class UserSession
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
+    private UUID id;
 
     // foreign key from users table
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, columnDefinition = "uuid")
     private User user;
 
     @Column(name = "created_at", nullable = false)
@@ -31,7 +34,7 @@ public class UserSession
     }
 
     // getters and setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 

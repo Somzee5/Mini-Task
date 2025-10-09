@@ -1,15 +1,18 @@
 package com.example.minitask.entity;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 public class User
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
+    private UUID id;
 
     @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
@@ -37,7 +40,7 @@ public class User
     }
 
     // ⚙ Getters and Setters (important for JPA to access fields)
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
