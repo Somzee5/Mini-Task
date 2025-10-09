@@ -19,7 +19,6 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // 🟩 Register a new user
     public User registerUser(String userName, String password,
                              String firstName, String lastName,
                              LocalDate dateOfBirth) {
@@ -37,12 +36,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // 🟩 Get all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    // 🟩 Get user by ID
     public Optional<User> getUserById(UUID id) {
         return userRepository.findById(id);
     }

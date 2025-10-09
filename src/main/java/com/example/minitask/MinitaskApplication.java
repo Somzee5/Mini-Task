@@ -9,10 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MinitaskApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MinitaskApplication.class, args);
-
 //        BCryptPasswordEncoder enc = new BCryptPasswordEncoder();
 //        System.out.println(enc.encode("admin123"));
+		SpringApplication.run(MinitaskApplication.class, args);
+
+
+
 	}
 }
 
