@@ -1,12 +1,23 @@
 package com.example.minitask.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class UserRequestDTO {
+    @NotBlank(message = "userName must not be null or blank")
     private String userName;
+
+    @NotBlank(message = "password must not be null or blank")
     private String password;
+
+    @NotBlank(message = "firstName must not be null or blank")
     private String firstName;
+
+    @NotBlank(message = "lastName must not be null or blank")
     private String lastName;
+
+    @NotNull(message = "dateOfBirth must not be null")
     private LocalDate dateOfBirth;
 
     // Getters and setters

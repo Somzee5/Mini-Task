@@ -2,6 +2,7 @@ package com.example.minitask.controller;
 
 import com.example.minitask.dto.AuthResponseDTO;
 import com.example.minitask.service.AuthService;
+import com.example.minitask.dto.LoginRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,20 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthResponseDTO> authenticate(
             @RequestBody(required = false) Map<String, String> credentials,
+            @jakarta.validation.Valid @RequestBody(required = false) LoginRequestDTO loginBody,
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) String password) {
         try {
             // Support both JSON and form-data
-            if (credentials != null) {
-                // Support both camelCase and lowercase keys often used in clients
+            if (loginBody != null) {
+                userName = loginBody.getUserName();
+                password = loginBody.getPassword();
+            } else if (credentials != null) {
                 userName = credentials.getOrDefault("userName", credentials.get("username"));
                 password = credentials.getOrDefault("password", credentials.get("pass"));
             }
-            if (userName == null || password == null) {
-                throw new RuntimeException("Missing userName or password");
+            if (userName == null || userName.isBlank() || password == null || password.isBlank()) {
+                throw new RuntimeException("userName and password must not be null or blank");
             }
 
             String token = authService.authenticate(userName, password);

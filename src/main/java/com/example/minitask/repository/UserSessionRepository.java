@@ -10,5 +10,4 @@ import java.util.UUID;
 @Repository
 public interface UserSessionRepository extends JpaRepository<UserSession, UUID> {
     Optional<UserSession> findBySessionToken(String sessionToken);
-    Optional<UserSession> findTopByUserOrderByCreatedAtDesc(User user);
 }

@@ -23,13 +23,11 @@ public class UserService {
                              String firstName, String lastName,
                              LocalDate dateOfBirth) {
 
-        // Check if user already exists
         Optional<User> existing = userRepository.findByUserName(userName);
         if (existing.isPresent()) {
             throw new RuntimeException("Username already exists!");
         }
 
-        // Hash password before saving
         String hashedPassword = passwordEncoder.encode(password);
 
         User user = new User(userName, hashedPassword, firstName, lastName, dateOfBirth);

@@ -21,7 +21,6 @@ public class AuthResponseDTO {
         return new AuthResponseDTO(false, message, null);
     }
 
-    // Getters and Setters
     public boolean isSuccess() { return success; }
     public String getMessage() { return message; }
     public String getToken() { return token; }

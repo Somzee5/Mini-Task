@@ -17,7 +17,6 @@ public class UserSessionService {
     @Autowired
     private UserSessionRepository userSessionRepository;
 
-    // 🔹 Create new session (used after successful login)
     public UserSession createSession(User user) {
         UserSession session = new UserSession();
         session.setUser(user);
@@ -26,7 +25,6 @@ public class UserSessionService {
         return userSessionRepository.save(session);
     }
 
-    // 🔹 Validate session token (throws if invalid)
     public void validateSession(String token) {
         Optional<UserSession> optionalSession = userSessionRepository.findBySessionToken(token);
 
@@ -38,18 +36,11 @@ public class UserSessionService {
         LocalDateTime createdAt = session.getCreatedAt();
         LocalDateTime now = LocalDateTime.now();
 
-        // Check if more than 10 minutes have passed
         Duration diff = Duration.between(createdAt, now);
-        if (diff.toMinutes() > 10) {
+        if (diff.toMinutes() > 5) {
             throw new RuntimeException("Session expired. Please log in again.");
         }
     }
 
-    // 🔹 Get user from valid session
-//    public User getUserFromToken(String token) {
-//        validateSession(token);
-//        return userSessionRepository.findBySessionToken(token)
-//                .map(UserSession::getUser)
-//                .orElseThrow(() -> new RuntimeException("Invalid session"));
-//    }
+
 }

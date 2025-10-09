@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<ApiResponse<User>> registerUser(
             @RequestHeader("X-Session-Token") String token,
-            @RequestBody UserRequestDTO requestDTO) {
+            @Valid @RequestBody UserRequestDTO requestDTO) {
         try {
             userSessionService.validateSession(token);
 
@@ -47,7 +48,6 @@ public class UserController {
         }
     }
 
-    // 🟩 Get all users (requires valid session)
     @GetMapping
     public ResponseEntity<ApiResponse<List<User>>> getAllUsers(
             @RequestHeader("X-Session-Token") String token) {
@@ -62,7 +62,7 @@ public class UserController {
         }
     }
 
-    // 🟩 Get user by ID (requires valid session)
+    // Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> getUserById(
             @RequestHeader("X-Session-Token") String token,
