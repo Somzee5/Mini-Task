@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface UserSessionRepository extends JpaRepository<UserSession, Long> {
     Optional<UserSession> findBySessionToken(String sessionToken);
-    Optional<UserSession> findTopByUserOrderByCreatedAtDesc(User user);
-}
+    }

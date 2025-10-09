@@ -46,10 +46,10 @@ public class UserSessionService {
     }
 
     // 🔹 Get user from valid session
-    public User getUserFromToken(String token) {
-        validateSession(token);
-        return userSessionRepository.findBySessionToken(token)
-                .map(UserSession::getUser)
-                .orElseThrow(() -> new RuntimeException("Invalid session"));
-    }
+//    public User getUserFromToken(String token) {
+//        validateSession(token);
+//        return userSessionRepository.findBySessionToken(token)
+//                .map(UserSession::getUser)
+//                .orElseThrow(() -> new RuntimeException("Invalid session"));
+//    }
 }
