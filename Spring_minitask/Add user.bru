@@ -1,0 +1,30 @@
+meta {
+  name: Add user
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/users
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-Session-Token: ddda6b56-c283-4cc5-8cdc-dbbf9500c0c9
+}
+
+body:json {
+  {
+    "userName": "john123",
+    "password": "john@123",
+    "firstName": "John",
+    "lastName": "Doe",
+    "dateOfBirth": "2001-05-12"
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+}

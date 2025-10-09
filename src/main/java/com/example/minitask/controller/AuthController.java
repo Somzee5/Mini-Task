@@ -1,6 +1,6 @@
 package com.example.minitask.controller;
 
-import com.example.minitask.dto.ApiResponse;
+import com.example.minitask.dto.AuthResponseDTO;
 import com.example.minitask.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ public class AuthController {
 
     // 🟩 Authenticate user and create session
     @PostMapping("/authenticate")
-    public ResponseEntity<ApiResponse<String>> authenticate(
+    public ResponseEntity<AuthResponseDTO> authenticate(
             @RequestBody(required = false) Map<String, String> credentials,
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) String password) {
@@ -33,11 +33,11 @@ public class AuthController {
             }
 
             String token = authService.authenticate(userName, password);
-            return ResponseEntity.ok(ApiResponse.success("Login successful", token));
+            return ResponseEntity.ok(AuthResponseDTO.success("Login successful", token));
 
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.failure(e.getMessage()));
+                    .body(AuthResponseDTO.failure(e.getMessage()));
         }
     }
 }

@@ -1,0 +1,19 @@
+meta {
+  name: Get user by ID
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/users/2
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-Session-Token: ddda6b56-c283-4cc5-8cdc-dbbf9500c0c9
+}
+
+settings {
+  encodeUrl: true
+}

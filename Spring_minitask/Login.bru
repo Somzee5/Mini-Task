@@ -5,9 +5,16 @@ meta {
 }
 
 post {
-  url: {{base_url}}/auth/login
-  body: formUrlEncoded
+  url: {{base_url}}/authenticate
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "userName": "admin", 
+    "password": "admin123"
+  }
 }
 
 body:form-urlencoded {
